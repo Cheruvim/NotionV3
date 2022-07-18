@@ -9,16 +9,44 @@ namespace TestProject1 {
         {
         }
 
-        [Test] public void Test1()
+        #region UserService
+        [Test]
+        public void AddNewUser()
         {
-            using (var db = new DataContext()){
-                db.Users.Add(new User
-                {
-                    Login = "1",
-                    Password = "1"
-                });
-                db.SaveChanges();
-            }
+            using var db = new DataContext();
+            var response = db.Users.AddOrUpdate(new User
+            {
+                Login = "2",
+                Password = "2"
+            });
+
+            Assert.True(response.Success);
         }
+
+        [Test]
+        public void UpdateUser()
+        {
+            using var db = new DataContext();
+            var response = db.Users.AddOrUpdate(new User
+            {
+                UserId = 1,
+                Login = "2",
+                Password = "2"
+            });
+
+            Assert.True(response.Success);
+        }
+
+        [Test]
+        public void GetUser()
+        {
+            using var db = new DataContext();
+            var response = db.Users.GetUser(1);
+
+            Assert.True(response.UserId > 0);
+        }
+        #endregion
+
+
     }
 }
