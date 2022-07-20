@@ -12,34 +12,16 @@ namespace DateBaseServices.Services
         {
         }
 
-        public ResponseModel AddOrUpdate(User user)
+        public void AddOrUpdate(User user)
         {
-            try
+            if (user.UserId < 1)
             {
-                if (user.UserId < 1)
-                {
-                    AddUser(user);
-                }
-                else
-                {
-                    UpdateUser(user);
-                }
-
-                return new ResponseModel
-                {
-                    Success = true,
-                    ErrorMessage = null
-                };
+                AddUser(user);
             }
-            catch (Exception e)
+            else
             {
-                return new ResponseModel
-                {
-                    Success = false,
-                    ErrorMessage = e.Message
-                };
+                UpdateUser(user);
             }
-
         }
 
         private void AddUser(User user)
@@ -74,7 +56,7 @@ namespace DateBaseServices.Services
             _db.SaveChanges();
         }
 
-        public User GetUser(int userId)
+        public User GetUserById(int userId)
         {
             if (userId < 1)
                 throw new DbServiceException("Указан некорректный идентификатор пользователя.");

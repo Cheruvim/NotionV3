@@ -14,39 +14,74 @@ namespace TestProject1 {
         public void AddNewUser()
         {
             using var db = new DataContext();
-            var response = db.Users.AddOrUpdate(new User
+            db.Users.AddOrUpdate(new User
             {
                 Login = "2",
                 Password = "2"
             });
-
-            Assert.True(response.Success);
         }
 
         [Test]
         public void UpdateUser()
         {
             using var db = new DataContext();
-            var response = db.Users.AddOrUpdate(new User
+            db.Users.AddOrUpdate(new User
             {
                 UserId = 1,
                 Login = "2",
                 Password = "2"
             });
-
-            Assert.True(response.Success);
         }
 
         [Test]
         public void GetUser()
         {
             using var db = new DataContext();
-            var response = db.Users.GetUser(1);
+            var response = db.Users.GetUserById(1);
 
             Assert.True(response.UserId > 0);
         }
         #endregion
 
+        #region Categories
+
+        [Test] 
+        public void CreateCategoty()
+        {
+            using var db = new DataContext();
+            db.Categories.CreateCategory(new Category
+            {
+                Title = "First category"
+            }, 1);
+        }
+        
+        [Test] 
+        public void GetCategoty()
+        {
+            using var db = new DataContext();
+            var cat = db.Categories.GetCategory(1, 1);
+        }
+        
+        [Test] 
+        public void UpdateCategoty()
+        {
+            using var db = new DataContext();
+            db.Categories.UpdateCategory(new Category
+            {
+                CategoryId = 1,
+                Title = "2nd czt"
+            }, 1);
+        }
+
+        [Test] 
+        public void AddUserInCategory()
+        {
+            using var db = new DataContext();
+            db.Categories.AddUserInCategory(2,1,1);
+
+        }
+
+        #endregion
 
     }
 }
