@@ -14,11 +14,6 @@
                 .WithOne(t => t.User)
                 .HasForeignKey(p => p.UserId)
                 .HasPrincipalKey(t => t.UserId);
-            
-            builder.HasMany(p => p.NoteHistories)
-                .WithOne(t => t.User)
-                .HasForeignKey(p => p.UserId)
-                .HasPrincipalKey(t => t.UserId);
         }
     }
 }

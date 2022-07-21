@@ -7,7 +7,7 @@
 
     public class CategoryService : DefaultService
     {
-        public CategoryService(DataContext db) : base(db)
+        internal CategoryService(DataContext db) : base(db)
         {
         }
 
@@ -23,9 +23,11 @@
                 throw new DbServiceException("Неверный идентификатор пользователя.");
 
             var createdCat = _db.DbCategories.Add(category);
+            _db.SaveChanges();
+            
             var createdLinker = _db.UserCategoryLinkers.Add(new UserCategoryLinker
             {
-                Category = category,
+                CategoryId = createdCat.Entity.CategoryId,
                 UserId = userId,
                 Role = 99
             });
@@ -60,7 +62,7 @@
             _db.SaveChanges();
 
             var linker = _db.UserCategoryLinkers
-                .FirstOrDefault(linker => linker.CategoryId == currentCategory.CategoryId && linker.UserId == userId);
+                .FirstOrDefault(linker => linker.CategoryId == currentCategory.CategoryId && linker.UserId == userId && linker.IsDeleted == false);
 
             if (linker == null)
                 throw new DbServiceException("Пользователя с данным идентификатором нет в данной категории.");
@@ -80,18 +82,17 @@
             if (categoryId < 1)
                 throw new DbServiceException("Указан неверный идентификатор категории.");
 
-            var currentCategory = _db.DbCategories.FirstOrDefault(cat => cat.CategoryId == categoryId);
+            var currentCategory = _db.DbCategories.FirstOrDefault(cat => cat.CategoryId == categoryId && cat.IsDeleted == false);
             if (currentCategory == null)
                 throw new DbServiceException("Не удалось найти категорию с данным идентификатором.");
-
-
-            if (_db.UserCategoryLinkers.FirstOrDefault(linker => linker.UserId == userId && linker.CategoryId == categoryId) == null)
+            
+            if (_db.UserCategoryLinkers.FirstOrDefault(linker => linker.UserId == userId && linker.CategoryId == categoryId && linker.IsDeleted == false) == null)
                 throw new DbServiceException("У вас нет прав на просмотр категории с данным идентификатором.");
 
             return currentCategory;
         }
 
-        public void AddUserInCategory(int userId, int categoryId, int userActionStartId)
+        public void AddUserInCategory(int userId, int categoryId, int userActionStartId, int role = 0)
         {
             if (categoryId < 1)
                 throw new DbServiceException("Указан неверный идентификатор категории.");
@@ -101,20 +102,75 @@
             
             if (userActionStartId < 1)
                 throw new DbServiceException("Указан неверный идентификатор пользователя создателя запроса.");
-            
-            if (_db.UserCategoryLinkers.FirstOrDefault(linker => linker.UserId == userActionStartId && linker.CategoryId == categoryId) == null)
+
+            var userLinker = _db.UserCategoryLinkers.FirstOrDefault(linker => linker.UserId == userActionStartId && linker.CategoryId == categoryId && linker.IsDeleted == false);
+            if (userLinker == null)
                 throw new DbServiceException("У вас нет прав на просмотр категории с данным идентификатором.");
 
-            GetCategory(categoryId, userActionStartId);
+            if (userLinker.Role < role)
+                throw new DbServiceException("Вы не можете добавить пользователя с правами выше ваших.");
+
+            var cat = GetCategory(categoryId, userActionStartId);
             _db.Users.GetUserById(userActionStartId);
             _db.Users.GetUserById(userId);
 
-            _db.UserCategoryLinkers.Add(new UserCategoryLinker
+            var linker = _db.UserCategoryLinkers.Add(new UserCategoryLinker
             {
                 CategoryId = categoryId,
-                UserId = userId
+                UserId = userId,
+                Role = role
             });
             _db.SaveChanges();
+            
+            _db.CategoryHistories.Add(new CategoryHistory
+            {
+                Action = $"В категорию с идентификатором {cat.CategoryId} добавлен пользователь с идентификатором {userId} пользователем с идентификатором {userActionStartId}",
+                Date = DateTime.Now,
+                UserCategoryLinkerId = linker.Entity.LinkerId,
+            });
+
+        }
+        
+        public void RemoveUserFromCategory(int userId, int categoryId, int userActionStartId)
+        {
+            if (categoryId < 1)
+                throw new DbServiceException("Указан неверный идентификатор категории.");
+
+            if (userId < 1)
+                throw new DbServiceException("Указан неверный идентификатор пользователя добавляемого.");
+            
+            if (userActionStartId < 1)
+                throw new DbServiceException("Указан неверный идентификатор пользователя создателя запроса.");
+
+            var userRemover = _db.UserCategoryLinkers.FirstOrDefault(linker => linker.UserId == userActionStartId && linker.CategoryId == categoryId && linker.IsDeleted == false);
+            var userForRemove = _db.UserCategoryLinkers.FirstOrDefault(linker => linker.UserId == userId && linker.CategoryId == categoryId && linker.IsDeleted == false);
+
+            if (userRemover == null)
+                throw new DbServiceException("У вас нет прав на взаимодествие с категорией с данным идентификатором.");
+
+            if (userForRemove == null)
+                throw new DbServiceException("Удаляемого пользователя нет в данной категории.");
+
+            if (userForRemove.Role > userRemover.Role)
+                throw new DbServiceException("Вы не можете удалить пользователя с правами выше ваших.");
+
+            var cat =  GetCategory(categoryId, userActionStartId);
+            
+            //// для проверки на наличие пользователей.
+            _db.Users.GetUserById(userActionStartId);
+            _db.Users.GetUserById(userId);
+
+            userForRemove.IsDeleted = true;
+            _db.UserCategoryLinkers.Update(userForRemove);
+            _db.SaveChanges();
+            
+            _db.CategoryHistories.Add(new CategoryHistory
+            {
+                Action = $"Из категории с идентификатором {cat.CategoryId} был удален пользователь с идентификатором {userId} пользователем с идентификатором {userActionStartId}",
+                Date = DateTime.Now,
+                UserCategoryLinkerId = userForRemove.LinkerId,
+            });
+
         }
     }
 }

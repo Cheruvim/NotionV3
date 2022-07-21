@@ -9,7 +9,7 @@
         public string Title { get; set; }
         public string Header { get; set; }
         public string Body { get; set; }
-        public DateTime LastEditDate { get; set; }
+        public bool IsDeleted { get; set; }
         
         public List<NoteCategoryLinker> NoteCategoryLinkers { get; set; }
         public List<NoteHistory> NoteHistories { get; set; }

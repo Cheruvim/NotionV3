@@ -20,10 +20,7 @@
                 .HasForeignKey(p => p.UserId)
                 .HasPrincipalKey(t => t.UserId);
             
-            builder.HasMany(p => p.CategoryHistories)
-                .WithOne(t => t.UserCategoryLinker)
-                .HasForeignKey(p => p.UserCategoryLinkerId)
-                .HasPrincipalKey(t => t.LinkerId);
+            
         }
     }
 }

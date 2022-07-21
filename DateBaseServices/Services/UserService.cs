@@ -8,7 +8,7 @@ namespace DateBaseServices.Services
 {
     public class UserService : DefaultService
     {
-        public UserService(DataContext db) : base(db)
+        internal UserService(DataContext db) : base(db)
         {
         }
 

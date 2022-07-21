@@ -10,10 +10,10 @@
             builder.ToTable("NoteHistory");
             builder.HasKey(p => p.HistoryId);
             
-            builder.HasOne(p => p.User)
+            builder.HasOne(p => p.UserCategoryLinker)
                 .WithMany(t => t.NoteHistories)
-                .HasForeignKey(p => p.UserId)
-                .HasPrincipalKey(t => t.UserId);
+                .HasForeignKey(p => p.UserCategoryLinkerId)
+                .HasPrincipalKey(t => t.LinkerId);
             
             builder.HasOne(p => p.Note)
                 .WithMany(t => t.NoteHistories)
