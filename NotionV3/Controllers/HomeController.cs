@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NotionV3.Models;
 
 namespace NotionV3.Controllers
 {
+    using DateBaseServices.Models;
+    using System.Collections.Generic;
+
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -17,6 +16,19 @@ namespace NotionV3.Controllers
         {
             _logger = logger;
         }
+        
+        public PartialViewResult getMenuList()
+        {
+            var list = new List<Category>
+            {
+                new Category{ CategoryId = 1, Title = "first cat"},
+                new Category{ CategoryId = 2, Title = "Sec cat"},
+            };
+
+
+            return PartialView("getMenuList", list);
+        }
+
 
         public IActionResult Index()
         {

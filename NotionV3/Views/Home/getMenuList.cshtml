@@ -1,0 +1,6 @@
+﻿@model System.Collections.Generic.List<DateBaseServices.Models.Category>
+
+@foreach (var cat in Model){
+    <a class="nav-link" cat-Id="@cat.CategoryId" href="#">@cat.Title</a>
+}
+

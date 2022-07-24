@@ -10,14 +10,15 @@ namespace DateBaseServices
     {
         internal DbSet<User> DbUsers { get; set; }
         internal DbSet<Category> DbCategories { get; set; }
-        public DbSet<Note> Notes { get; set; }
-        public DbSet<UserCategoryLinker> UserCategoryLinkers { get; set; }
-        public DbSet<NoteCategoryLinker> NoteCategoryLinkers { get; set; }
-        public DbSet<NoteHistory> NoteHistories { get; set; }
-        public DbSet<CategoryHistory> CategoryHistories { get; set; }
+        internal DbSet<Note> DbNotes { get; set; }
+        internal DbSet<UserCategoryLinker> UserCategoryLinkers { get; set; }
+        internal DbSet<NoteCategoryLinker> NoteCategoryLinkers { get; set; }
+        internal DbSet<NoteHistory> NoteHistories { get; set; }
+        internal DbSet<CategoryHistory> CategoryHistories { get; set; }
 
         public UserService Users { get; }
         public CategoryService Categories { get; }
+        public NoteService Notes { get; }
 
         public DataContext()
         {
@@ -25,6 +26,7 @@ namespace DateBaseServices
 
             Users = new UserService(this);
             Categories = new CategoryService(this);
+            Notes = new NoteService(this);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
