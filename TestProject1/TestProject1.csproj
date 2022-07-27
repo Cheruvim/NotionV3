@@ -15,6 +15,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\DateBaseServices\DateBaseServices.csproj" />
+      <ProjectReference Include="..\SecurityService\SecurityService.csproj" />
     </ItemGroup>
 
 </Project>
