@@ -25,7 +25,6 @@ namespace NotionV3.Controllers
                 new Category{ CategoryId = 2, Title = "Sec cat"},
             };
 
-
             return PartialView("getMenuList", list);
         }
 
