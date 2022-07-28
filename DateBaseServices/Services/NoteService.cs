@@ -11,8 +11,11 @@
         {
         }
 
-        public void AddNote(Note note, int categoryId, int userId)
+        public void AddNote(Note note, int categoryId, int userId, string token)
         {
+            if (!SecurityService.Service.SecurityService.ValidateCurrentToken(token))
+                throw new DbServiceException($"Токен({token}) недействителен.");
+
             if (note == null)
                 throw new DbServiceException("Экземпляр категории не задан.");
             
@@ -48,8 +51,11 @@
             _db.SaveChanges();
         }
 
-        public void EditNote(Note note, int categoryId, int userId)
-        {
+        public void EditNote(Note note, int categoryId, int userId, string token)
+        {            
+            if (!SecurityService.Service.SecurityService.ValidateCurrentToken(token))
+                throw new DbServiceException($"Токен({token}) недействителен.");
+
             if (note == null)
                 throw new DbServiceException("Экземпляр категории не задан.");
             

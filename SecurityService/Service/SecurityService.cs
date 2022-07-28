@@ -6,9 +6,9 @@
     using System.Security.Claims;
     using System.Text;
 
-    public class SecurityService 
+    public static class SecurityService 
     {
-        public string GenerateToken(int userId)
+        public static string GenerateToken(int userId)
         {
             var mySecret = "asdv234234^&%&^%&^hjsdfb2%%%";
             var mySecurityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(mySecret));
@@ -33,7 +33,7 @@
             return tokenHandler.WriteToken(token);
         }
         
-        public bool ValidateCurrentToken(string token)
+        public static bool ValidateCurrentToken(string token)
         {
             var mySecret = "asdv234234^&%&^%&^hjsdfb2%%%";
             var mySecurityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(mySecret));
