@@ -3,29 +3,29 @@
     using Microsoft.IdentityModel.Tokens;
     using System;
     using System.IdentityModel.Tokens.Jwt;
+    using System.Linq;
     using System.Security.Claims;
     using System.Text;
 
-    public static class SecurityService 
-    {
+    public static class SecurityService {
+        private readonly static string Secret = "asdv234234^&%&^%&^hjsdfb2%%%";
+        private readonly static string Issuer = "http://mysite.com";
+        private readonly static string Audience = "http://myaudience.com";
+
         public static string GenerateToken(int userId)
         {
-            var mySecret = "asdv234234^&%&^%&^hjsdfb2%%%";
-            var mySecurityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(mySecret));
-
-            var myIssuer = "http://mysite.com";
-            var myAudience = "http://myaudience.com";
-
+            var mySecurityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Secret));
+            
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
+                    new Claim("UserId", userId.ToString()),
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
-                Issuer = myIssuer,
-                Audience = myAudience,
+                Issuer = Issuer,
+                Audience = Audience,
                 SigningCredentials = new SigningCredentials(mySecurityKey, SecurityAlgorithms.HmacSha256Signature)
             };
 
@@ -33,31 +33,32 @@
             return tokenHandler.WriteToken(token);
         }
         
-        public static bool ValidateCurrentToken(string token)
+        public static bool ValidateCurrentToken(string token, int userId)
         {
-            var mySecret = "asdv234234^&%&^%&^hjsdfb2%%%";
-            var mySecurityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(mySecret));
-
-            var myIssuer = "http://mysite.com";
-            var myAudience = "http://myaudience.com";
-
+            var mySecurityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Secret));
+            
             var tokenHandler = new JwtSecurityTokenHandler();
             try
             {
-                tokenHandler.ValidateToken(token, new TokenValidationParameters
+                var t = tokenHandler.ValidateToken(token, new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
                     ValidateIssuer = true,
                     ValidateAudience = true,
-                    ValidIssuer = myIssuer,
-                    ValidAudience = myAudience,
+                    ValidIssuer = Issuer,
+                    ValidAudience = Audience,
                     IssuerSigningKey = mySecurityKey
                 }, out SecurityToken validatedToken);
+                var userIdStr = t.Claims.First(x => x.Type == "UserId").Value;
+                
+                if (int.Parse(userIdStr) != userId)
+                    return false;
             }
             catch
             {
                 return false;
             }
+            
             return true;
         }
 

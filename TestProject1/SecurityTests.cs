@@ -22,7 +22,7 @@
         {
             CreateToken();
             var token = SecurityService.GenerateToken(1);
-            var validate = SecurityService.ValidateCurrentToken(token);
+            var validate = SecurityService.ValidateCurrentToken(token, 1);
 
         }
 

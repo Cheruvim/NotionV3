@@ -5,8 +5,10 @@ namespace TestProject1 {
     using DateBaseServices.Models;
 
     public class Tests {
+        private string token = SecurityService.Service.SecurityService.GenerateToken(1);
         [SetUp] public void Setup()
         {
+            
         }
 
         #region UserService
@@ -30,7 +32,7 @@ namespace TestProject1 {
                 UserId = 1,
                 Login = "2",
                 Password = "2"
-            });
+            }, token);
         }
 
         [Test]
@@ -52,14 +54,14 @@ namespace TestProject1 {
             db.Categories.CreateCategory(new Category
             {
                 Title = "First category"
-            }, 1);
+            }, 1, token);
         }
         
         [Test] 
         public void GetCategoty()
         {
             using var db = new DataContext();
-            var cat = db.Categories.GetCategory(1, 1);
+            var cat = db.Categories.GetCategory(1, 1, token);
         }
         
         [Test] 
@@ -70,14 +72,14 @@ namespace TestProject1 {
             {
                 CategoryId = 1,
                 Title = "2nd czt"
-            }, 1);
+            }, 1, token);
         }
 
         [Test] 
         public void AddUserInCategory()
         {
             using var db = new DataContext();
-            db.Categories.AddUserInCategory(2,1,1);
+            db.Categories.AddUserInCategory(2,1,1, token);
 
         }
 

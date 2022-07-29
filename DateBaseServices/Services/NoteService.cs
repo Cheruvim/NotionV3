@@ -13,7 +13,7 @@
 
         public void AddNote(Note note, int categoryId, int userId, string token)
         {
-            if (!SecurityService.Service.SecurityService.ValidateCurrentToken(token))
+            if (!SecurityService.Service.SecurityService.ValidateCurrentToken(token, userId))
                 throw new DbServiceException($"Токен({token}) недействителен.");
 
             if (note == null)
@@ -53,7 +53,7 @@
 
         public void EditNote(Note note, int categoryId, int userId, string token)
         {            
-            if (!SecurityService.Service.SecurityService.ValidateCurrentToken(token))
+            if (!SecurityService.Service.SecurityService.ValidateCurrentToken(token, userId))
                 throw new DbServiceException($"Токен({token}) недействителен.");
 
             if (note == null)

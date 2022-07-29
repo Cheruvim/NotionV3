@@ -12,18 +12,15 @@ namespace DateBaseServices.Services
         {
         }
 
-        public void AddOrUpdate(User user, string token)
+        public void AddOrUpdate(User user, string token = null)
         {
-            if (!SecurityService.Service.SecurityService.ValidateCurrentToken(token))
-                throw new DbServiceException($"Токен({token}) недействителен.");
-
             if (user.UserId < 1)
             {
                 AddUser(user);
             }
             else
             {
-                UpdateUser(user);
+                UpdateUser(user, token);
             }
         }
 
@@ -39,8 +36,11 @@ namespace DateBaseServices.Services
             _db.SaveChanges();
         }
 
-        private void UpdateUser(User user)
+        private void UpdateUser(User user, string token)
         {
+            if (!SecurityService.Service.SecurityService.ValidateCurrentToken(token, user.UserId))
+                throw new DbServiceException($"Токен({token}) недействителен.");
+
             var currentUser = _db.DbUsers.FirstOrDefault(u => u.UserId == user.UserId && u.Login == user.Login);
 
             if (currentUser == null)
@@ -59,11 +59,8 @@ namespace DateBaseServices.Services
             _db.SaveChanges();
         }
 
-        public User GetUserById(int userId, string token)
+        public User GetUserById(int userId)
         {
-            if (!SecurityService.Service.SecurityService.ValidateCurrentToken(token))
-                throw new DbServiceException($"Токен({token}) недействителен.");
-
             if (userId < 1)
                 throw new DbServiceException("Указан некорректный идентификатор пользователя.");
 

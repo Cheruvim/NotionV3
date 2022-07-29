@@ -13,7 +13,7 @@
 
         public void CreateCategory(Category category, int userId, string token)
         {
-            if (!SecurityService.Service.SecurityService.ValidateCurrentToken(token))
+            if (!SecurityService.Service.SecurityService.ValidateCurrentToken(token, userId))
                 throw new DbServiceException($"Токен({token}) недействителен.");
 
             if (category == null)
@@ -48,7 +48,7 @@
         
         public void UpdateCategory(Category category, int userId, string token)
         {
-            if (!SecurityService.Service.SecurityService.ValidateCurrentToken(token))
+            if (!SecurityService.Service.SecurityService.ValidateCurrentToken(token, userId))
                 throw new DbServiceException($"Токен({token}) недействителен.");
 
             if (category == null)
@@ -85,7 +85,7 @@
 
         public Category GetCategory(int categoryId, int userId, string token)
         {
-            if (!SecurityService.Service.SecurityService.ValidateCurrentToken(token))
+            if (!SecurityService.Service.SecurityService.ValidateCurrentToken(token, userId))
                 throw new DbServiceException($"Токен({token}) недействителен.");
 
             if (categoryId < 1)
@@ -103,7 +103,7 @@
 
         public void AddUserInCategory(int userId, int categoryId, int userActionStartId, string token, int role = 0)
         {
-            if (!SecurityService.Service.SecurityService.ValidateCurrentToken(token))
+            if (!SecurityService.Service.SecurityService.ValidateCurrentToken(token, userActionStartId))
                 throw new DbServiceException($"Токен({token}) недействителен.");
 
             if (categoryId < 1)
@@ -123,8 +123,8 @@
                 throw new DbServiceException("Вы не можете добавить пользователя с правами выше ваших.");
 
             var cat = GetCategory(categoryId, userActionStartId, token);
-            _db.Users.GetUserById(userActionStartId, token);
-            _db.Users.GetUserById(userId, token);
+            _db.Users.GetUserById(userActionStartId);
+            _db.Users.GetUserById(userId);
 
             var linker = _db.UserCategoryLinkers.Add(new UserCategoryLinker
             {
@@ -145,7 +145,7 @@
         
         public void RemoveUserFromCategory(int userId, int categoryId, int userActionStartId, string token)
         {
-            if (!SecurityService.Service.SecurityService.ValidateCurrentToken(token))
+            if (!SecurityService.Service.SecurityService.ValidateCurrentToken(token, userActionStartId))
                 throw new DbServiceException($"Токен({token}) недействителен.");
 
             if (categoryId < 1)
@@ -172,8 +172,8 @@
             var cat =  GetCategory(categoryId, userActionStartId, token);
             
             //// для проверки на наличие пользователей.
-            _db.Users.GetUserById(userActionStartId, token);
-            _db.Users.GetUserById(userId, token);
+            _db.Users.GetUserById(userActionStartId);
+            _db.Users.GetUserById(userId);
 
             userForRemove.IsDeleted = true;
             _db.UserCategoryLinkers.Update(userForRemove);
