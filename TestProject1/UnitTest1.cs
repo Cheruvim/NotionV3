@@ -3,20 +3,22 @@ using NUnit.Framework;
 namespace TestProject1 {
     using DateBaseServices;
     using DateBaseServices.Models;
+    using SecurityService.Service;
 
     public class Tests {
-        private string token = SecurityService.Service.SecurityService.GenerateToken(1);
+        private string token = SecurityService.GenerateToken(2);
+
+        private DataContext _db;
         [SetUp] public void Setup()
         {
-            
+            _db = new DataContext();
         }
 
         #region UserService
         [Test]
         public void AddNewUser()
         {
-            using var db = new DataContext();
-            db.Users.AddOrUpdate(new User
+            _db.Users.AddOrUpdate(new User
             {
                 Login = "2",
                 Password = "2"
@@ -26,10 +28,9 @@ namespace TestProject1 {
         [Test]
         public void UpdateUser()
         {
-            using var db = new DataContext();
-            db.Users.AddOrUpdate(new User
+            _db.Users.AddOrUpdate(new User
             {
-                UserId = 1,
+                UserId = 2,
                 Login = "2",
                 Password = "2"
             }, token);
@@ -38,8 +39,7 @@ namespace TestProject1 {
         [Test]
         public void GetUser()
         {
-            using var db = new DataContext();
-            var response = db.Users.GetUserById(1);
+            var response = _db.Users.GetUserById(1);
 
             Assert.True(response.UserId > 0);
         }
@@ -50,40 +50,61 @@ namespace TestProject1 {
         [Test] 
         public void CreateCategoty()
         {
-            using var db = new DataContext();
-            db.Categories.CreateCategory(new Category
+            _db.Categories.CreateCategory(new Category
             {
-                Title = "First category"
+                Title = "4th category"
             }, 1, token);
         }
         
         [Test] 
         public void GetCategoty()
         {
-            using var db = new DataContext();
-            var cat = db.Categories.GetCategory(1, 1, token);
+            var cat = _db.Categories.GetCategoryById(1, 1, token);
         }
         
         [Test] 
         public void UpdateCategoty()
         {
-            using var db = new DataContext();
-            db.Categories.UpdateCategory(new Category
+            _db.Categories.UpdateCategory(new Category
             {
                 CategoryId = 1,
-                Title = "2nd czt"
+                Title = "thirth cat",
+                IsDeleted = true
             }, 1, token);
         }
 
         [Test] 
         public void AddUserInCategory()
         {
-            using var db = new DataContext();
-            db.Categories.AddUserInCategory(2,1,1, token);
+            _db.Categories.AddUserInCategory(2,4,1, token);
+
+        }
+        
+        [Test] 
+        public void RemoveUserFromCategory()
+        {
+            _db.Categories.RemoveUserFromCategory(1,2,1, token);
+
+        }
+
+        [Test] public void GetAllCatByUserIdTest()
+        {
+            var categories = _db.Categories.GetCategoriesByUserId(1, token);
+            
+        }
+
+
+        #endregion
+
+        #region Security
+
+        [Test] public void AuthorizeTest()
+        {
+            var currToken = _db.Users.Authorize("1", "1");
+            var checkToken = SecurityService.ValidateCurrentToken(currToken.Token, currToken.UserId);
 
         }
 
         #endregion
-
     }
 }

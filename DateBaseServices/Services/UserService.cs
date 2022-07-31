@@ -68,8 +68,17 @@ namespace DateBaseServices.Services
             if (user == null)
                 throw new DbServiceException("Не удалось найти пользователя с данным идентификатором.");
 
-            user.Password = null;
-            return user;
+            return new User {UserId = user.UserId, Description = user.Description, Login = user.Login, Name = user.Name, IsAdmin = user.IsAdmin};
+        }
+
+        public AuthorizeModel Authorize(string login, string password)
+        {
+            var user = _db.DbUsers.FirstOrDefault(x => x.Login == login && x.Password == password);
+            if (user == null)
+                throw new DbServiceException("Пользователя с данной парой логин - пароль не найдено.");
+            
+            var token =  SecurityService.Service.SecurityService.GenerateToken(user.UserId);
+            return new AuthorizeModel {Token = token, UserId = user.UserId, Login = user.Login, IsAdmin = user.IsAdmin};
         }
     }
 }

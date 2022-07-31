@@ -4,55 +4,27 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="@ViewData["Title"] - NotionV3">
-    <link rel="icon" href="img/favicon.ico">
+    <link rel="icon" href="~/img/favicon.ico">
 
     <title>@ViewData["Title"] - NotionV3</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="css/offcanvas.css" rel="stylesheet">
+    <link href="~/css/offcanvas.css" rel="stylesheet">
   </head>
 
 <body class="bg-light">
 <nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
-  <a class="navbar-brand" href="#">Offcanvas navbar</a>
+  <a asp-controller="Home" asp-action="Index" class="navbar-brand">Offcanvas navbar</a>
    
   <div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
     <form class="form-inline mr-auto">
       <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
     </form>
-    <ul class="navbar-nav my-2 my-lg-0">
-      <li class="nav-item active">
-        <a class="nav-link" href="#">Dashboard <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Notifications</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Profile</a>
-      </li>
-      <li>
-        <a class="nav-link" href="#">
-          Friends
-          <span class="badge badge-pill bg-dark align-text-bottom">27</span>
-        </a>
-
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Switch account</a>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Settings</a>
-        <div class="dropdown-menu" aria-labelledby="dropdown01">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <a class="dropdown-item" href="#">Something else here</a>
-        </div>
-      </li>
-    </ul>
+    @await Component.InvokeAsync("GetAuthorizedUser")
   </div>
 </nav>
    
@@ -66,7 +38,7 @@
    
 <main role="main" class="container">
   <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-purple rounded box-shadow">
-    <img class="mr-3" src="img/bootstrap-outline.svg" alt="" width="48" height="48">
+    <img class="mr-3" src="~/img/bootstrap-outline.svg" alt="" width="48" height="48">
     <div class="lh-100">
       <h6 class="mb-0 text-white lh-100">Bootstrap</h6>
       <small>Since 2011</small>
@@ -88,9 +60,9 @@
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script>window.jQuery || document.write('<script src="js/jquery-slim.min.js"><\/script>')</script>
-<script src="js/popper.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/holder.js"></script>
-<script src="js/offcanvas.js"></script>
+<script src="~/js/popper.min.js"></script>
+<script src="~/js/bootstrap.min.js"></script>
+<script src="~/js/holder.js"></script>
+<script src="~/js/offcanvas.js"></script>
 </body>
 </html>

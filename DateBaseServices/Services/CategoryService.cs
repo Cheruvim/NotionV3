@@ -2,7 +2,9 @@
 {
     using DateBaseServices.Models;
     using Exceptions;
+    using Microsoft.EntityFrameworkCore;
     using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     public class CategoryService : DefaultService
@@ -60,7 +62,7 @@
             if (category.CategoryId < 1)
                 throw new DbServiceException("Не задан идентификатор категории.");
 
-            var currentCategory = GetCategory(category.CategoryId, userId, token);
+            var currentCategory = GetCategoryById(category.CategoryId, userId, token);
             var pastTitle = currentCategory.Title;
             currentCategory.Title = category.Title;
             _db.DbCategories.Update(currentCategory);
@@ -83,7 +85,7 @@
             _db.SaveChanges();
         }
 
-        public Category GetCategory(int categoryId, int userId, string token)
+        public Category GetCategoryById(int categoryId, int userId, string token)
         {
             if (!SecurityService.Service.SecurityService.ValidateCurrentToken(token, userId))
                 throw new DbServiceException($"Токен({token}) недействителен.");
@@ -100,6 +102,21 @@
 
             return currentCategory;
         }
+        
+        public List<Category> GetCategoriesByUserId(int userId, string token)
+        {
+            if (!SecurityService.Service.SecurityService.ValidateCurrentToken(token, userId))
+                throw new DbServiceException($"Токен({token}) недействителен.");
+            
+            var categories = _db.UserCategoryLinkers
+                .Where(linker => linker.UserId == userId && !linker.IsDeleted)
+                .Include(linker => linker.Category)
+                .Where(linker => !linker.Category.IsDeleted)
+                .Select(cat => cat.Category);
+            
+            return categories.ToList();
+        }
+
 
         public void AddUserInCategory(int userId, int categoryId, int userActionStartId, string token, int role = 0)
         {
@@ -122,7 +139,7 @@
             if (userLinker.Role < role)
                 throw new DbServiceException("Вы не можете добавить пользователя с правами выше ваших.");
 
-            var cat = GetCategory(categoryId, userActionStartId, token);
+            var cat = GetCategoryById(categoryId, userActionStartId, token);
             _db.Users.GetUserById(userActionStartId);
             _db.Users.GetUserById(userId);
 
@@ -169,7 +186,7 @@
             if (userForRemove.Role > userRemover.Role)
                 throw new DbServiceException("Вы не можете удалить пользователя с правами выше ваших.");
 
-            var cat =  GetCategory(categoryId, userActionStartId, token);
+            var cat =  GetCategoryById(categoryId, userActionStartId, token);
             
             //// для проверки на наличие пользователей.
             _db.Users.GetUserById(userActionStartId);

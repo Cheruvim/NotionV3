@@ -1,0 +1,50 @@
+﻿@model DateBaseServices.Services.Models.AuthorizeModel
+@{
+    bool isAuthorized = false;
+    if (Model != null){
+        isAuthorized = !string.IsNullOrEmpty(Model.Login) &&
+                           Model.UserId != 0 &&
+                           !string.IsNullOrEmpty(Model.Token);
+    }
+    
+}
+<ul class="navbar-nav my-2 my-lg-0">
+    <li class="nav-item active">
+        <a class="nav-link" href="#">Dashboard <span class="sr-only">(current)</span></a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#">Notifications</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#">Profile</a>
+    </li>
+    <li>
+        <a class="nav-link" href="#">
+            Friends
+            <span class="badge badge-pill bg-dark align-text-bottom">27</span>
+        </a>
+
+    </li>
+    @if (!isAuthorized){
+        <li class="nav-item">
+            <a asp-controller="Account" asp-action="Login" class="nav-link">Login</a>
+        </li>
+
+    }
+    else{
+        <li class="nav-item">
+            <a class="nav-link" href="#">@Model.Login</a>
+        </li>
+        <li class="nav-item">
+            <a asp-controller="Account" asp-action="Logout" class="nav-link">Logout</a>
+        </li>
+    }
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Settings</a>
+        <div class="dropdown-menu" aria-labelledby="dropdown01">
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+    </li>
+</ul>

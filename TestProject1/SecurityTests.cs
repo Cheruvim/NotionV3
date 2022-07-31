@@ -25,6 +25,5 @@
             var validate = SecurityService.ValidateCurrentToken(token, 1);
 
         }
-
     }
 }
