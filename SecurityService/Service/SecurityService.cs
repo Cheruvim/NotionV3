@@ -1,4 +1,4 @@
-﻿namespace SecurityService.Service 
+﻿namespace SecurityService.Service
 {
     using Microsoft.IdentityModel.Tokens;
     using System;
@@ -7,15 +7,16 @@
     using System.Security.Claims;
     using System.Text;
 
-    public static class SecurityService {
-        private readonly static string Secret = "asdv234234^&%&^%&^hjsdfb2%%%";
-        private readonly static string Issuer = "http://mysite.com";
-        private readonly static string Audience = "http://myaudience.com";
+    public static class SecurityService
+    {
+        private const string Secret = "asdv234234^&%&^%&^hjsdfb2%%%";
+        private const string Issuer = "http://mysite.com";
+        private const string Audience = "http://myaudience.com";
 
         public static string GenerateToken(int userId)
         {
             var mySecurityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Secret));
-            
+
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -32,11 +33,11 @@
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
-        
+
         public static bool ValidateCurrentToken(string token, int userId)
         {
             var mySecurityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Secret));
-            
+
             var tokenHandler = new JwtSecurityTokenHandler();
             try
             {
@@ -48,9 +49,9 @@
                     ValidIssuer = Issuer,
                     ValidAudience = Audience,
                     IssuerSigningKey = mySecurityKey
-                }, out SecurityToken validatedToken);
+                }, out _);
                 var userIdStr = t.Claims.First(x => x.Type == "UserId").Value;
-                
+
                 if (int.Parse(userIdStr) != userId)
                     return false;
             }
@@ -58,7 +59,7 @@
             {
                 return false;
             }
-            
+
             return true;
         }
 

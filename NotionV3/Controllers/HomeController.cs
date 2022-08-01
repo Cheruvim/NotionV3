@@ -16,25 +16,9 @@ namespace NotionV3.Controllers
         {
             _logger = logger;
         }
-        
-        public PartialViewResult getMenuList()
-        {
-            var list = new List<Category>
-            {
-                new Category{ CategoryId = 1, Title = "first cat"},
-                new Category{ CategoryId = 2, Title = "Sec cat"},
-            };
 
-            return PartialView("getMenuList", list);
-        }
-
-
+        [HttpGet]
         public IActionResult Index()
-        {
-            return View();
-        }
-
-        public IActionResult Privacy()
         {
             return View();
         }
