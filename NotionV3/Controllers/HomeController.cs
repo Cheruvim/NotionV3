@@ -35,6 +35,17 @@ namespace NotionV3.Controllers
             return View(notes);
         }
 
+        [HttpPost]
+        public IActionResult AddCategory(string categoryTitle)
+        {
+            var user = UserCookieUtility.GetUserInfoFromCookies(HttpContext);
+
+            var newCat = new Category { Title = categoryTitle };
+            var createdCarId = _db.Categories.CreateCategory(newCat, user.UserId, user.Token);
+
+            return RedirectToAction("Index", createdCarId);
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

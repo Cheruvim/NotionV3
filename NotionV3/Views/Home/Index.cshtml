@@ -18,4 +18,38 @@
             </p>
         </div>
     }
+
+    <button type="button" class="btn site-bg-blue text-white w-100" id="categoryCreateButton"><span class="feather-16" data-feather="plus-circle"></span> <span class="d-none d-xl-inline">Создать</span></button>
+
+}
+
+
+@section SectionsActionsDialog
+{
+<div class="modal fade" id="categoryEditDialog" tabindex="-1" role="dialog" aria-labelledby="categoryEditDialogTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="categoryEditDialogTitle">Пост</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form asp-controller="Home" asp-action="AddCategory" enctype="multipart/form-data" method="POST">
+                <div class="modal-body">
+                        <input type="hidden" class="form-control" id="categoryId" name="categoryId" value="">
+                    <div class="form-group">
+                        <label for="categoryTitle">Название категории</label>
+                        <input type="text" class="form-control" id="categoryTitle" name="categoryTitle" placeholder="Введите название статьи">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn site-bg-blue text-white">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 }
