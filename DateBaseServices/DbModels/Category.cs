@@ -1,7 +1,7 @@
-﻿namespace DateBaseServices.Models 
-{
-    using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
+namespace DateBaseServices.DbModels 
+{
     public class Category 
     {
         public int CategoryId { get; set; }

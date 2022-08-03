@@ -1,7 +1,6 @@
 ﻿namespace TestProject1 
 {
     using DateBaseServices;
-    using DateBaseServices.Models;
     using NUnit.Framework;
     using SecurityService.Service;
 

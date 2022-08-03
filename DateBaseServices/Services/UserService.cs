@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
+using DateBaseServices.DbModels;
 using DateBaseServices.Exceptions;
-using DateBaseServices.Models;
 using DateBaseServices.Services.Models;
 
 namespace DateBaseServices.Services

@@ -1,6 +1,4 @@
-﻿using DateBaseServices.Models;
-
-namespace DateBaseServices.Services
+﻿namespace DateBaseServices.Services
 {
     public class DefaultService
     {

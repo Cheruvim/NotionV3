@@ -1,7 +1,7 @@
-﻿namespace DateBaseServices.Models 
-{
-    using System;
+﻿using System;
 
+namespace DateBaseServices.DbModels 
+{
     public class CategoryHistory 
     {
         public int HistoryId { get; set; }

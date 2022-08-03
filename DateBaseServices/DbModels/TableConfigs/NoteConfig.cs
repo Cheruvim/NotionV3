@@ -1,8 +1,8 @@
-﻿namespace DateBaseServices.Models.TableConfigs 
-{
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+namespace DateBaseServices.DbModels.TableConfigs 
+{
     public class NoteConfig : IEntityTypeConfiguration<Note>
     {
         public void Configure(EntityTypeBuilder<Note> builder)

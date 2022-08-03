@@ -1,4 +1,4 @@
-﻿namespace DateBaseServices.Models 
+﻿namespace DateBaseServices.DbModels 
 {
 
     public class NoteCategoryLinker 

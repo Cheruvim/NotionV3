@@ -1,5 +1,5 @@
-﻿@model System.Collections.Generic.List<DateBaseServices.Models.Category>
+﻿@model System.Collections.Generic.List<DateBaseServices.DbModels.Category>
 
 @foreach (var cat in Model){
-    <a class="nav-link" cat-Id="@cat.CategoryId" href="#">@cat.Title</a>
+    <a class="nav-link" asp-action="Index" asp-route-catId="@cat.CategoryId">@cat.Title</a>
 }

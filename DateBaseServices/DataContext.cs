@@ -1,10 +1,10 @@
-﻿using DateBaseServices.Services;
+﻿using DateBaseServices.DbModels;
+using DateBaseServices.DbModels.TableConfigs;
+using DateBaseServices.Services;
 
 namespace DateBaseServices
 {
     using Microsoft.EntityFrameworkCore;
-    using Models;
-    using Models.TableConfigs;
 
     public class DataContext : DbContext
     {

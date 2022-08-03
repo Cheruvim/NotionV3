@@ -1,10 +1,10 @@
-﻿namespace NotionV3.Controllers 
-{
-    using DateBaseServices;
-    using Microsoft.AspNetCore.Mvc;
-    using System.Threading.Tasks;
-    using Utils;
+﻿using System.Threading.Tasks;
+using DateBaseServices;
+using Microsoft.AspNetCore.Mvc;
+using NotionV3.Utils;
 
+namespace NotionV3.Components 
+{
     public class GetAuthorizedUserViewComponent : ViewComponent
     {
         private DataContext _db = new DataContext();

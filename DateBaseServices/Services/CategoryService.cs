@@ -1,6 +1,7 @@
-﻿namespace DateBaseServices.Services
+﻿using DateBaseServices.DbModels;
+
+namespace DateBaseServices.Services
 {
-    using DateBaseServices.Models;
     using Exceptions;
     using Microsoft.EntityFrameworkCore;
     using System;

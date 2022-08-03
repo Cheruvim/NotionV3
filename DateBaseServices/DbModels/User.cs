@@ -1,8 +1,7 @@
-﻿namespace DateBaseServices.Models
-{
-    using System.Collections.Generic;
-    using System.Reflection;
+﻿using System.Collections.Generic;
 
+namespace DateBaseServices.DbModels
+{
     public class User
     {
         public int UserId { get; set; }

@@ -1,13 +1,12 @@
-﻿namespace NotionV3.Controllers {
-    using DateBaseServices;
-    using DateBaseServices.Models;
-    using Microsoft.AspNetCore.Mvc;
-    using SecurityService.Service;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using Utils;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using DateBaseServices;
+using DateBaseServices.DbModels;
+using Microsoft.AspNetCore.Mvc;
+using NotionV3.Utils;
 
-    public class GetCategoriesViewComponent : ViewComponent 
+namespace NotionV3.Components {
+    public class GetCategoriesViewComponent : ViewComponent
     {
         private DataContext _db = new DataContext();
         public async Task<IViewComponentResult> InvokeAsync()
@@ -16,7 +15,7 @@
             var currentUser = UserCookieUtility.GetUserInfoFromCookies(HttpContext);
             if(currentUser != null && !string.IsNullOrEmpty(currentUser.Login) && currentUser.UserId != 0 && !string.IsNullOrEmpty(currentUser.Token))
                 catList = _db.Categories.GetCategoriesByUserId(currentUser.UserId, currentUser.Token);
-            
+
             return View(catList);
         }
     }

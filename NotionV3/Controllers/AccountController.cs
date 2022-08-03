@@ -1,7 +1,8 @@
-﻿namespace NotionV3.Controllers 
+﻿using DateBaseServices.DbModels;
+
+namespace NotionV3.Controllers
 {
     using DateBaseServices;
-    using DateBaseServices.Models;
     using DateBaseServices.Services.Models;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
@@ -19,7 +20,7 @@
             _logger = logger;
             _db = new DataContext();
         }
-        
+
         /// <summary>
         /// Обрабатывает запрос на переход к главной странице контроллера управления аккаунтами.
         /// </summary>
@@ -30,7 +31,7 @@
             // Выполняет переадресацию на страницу авторизации (метод Login() контроллера управления аккаунтами).
             return RedirectToAction("Login");
         }
-        
+
         /// <summary>
         /// Обрабатывает запрос на переход к главной странице контроллера управления аккаунтами.
         /// </summary>
@@ -53,7 +54,7 @@
         {
             return View();
         }
-        
+
         /// <summary>
         /// Обрабатывает запрос на авторизацию.
         /// </summary>
@@ -100,7 +101,7 @@
             try{
                 if (string.IsNullOrEmpty(model.Login) || string.IsNullOrEmpty(model.Password))
                     throw new Exception();
-                
+
                 _db.Users.AddOrUpdate(model);
             }
             catch (Exception e)

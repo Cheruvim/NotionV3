@@ -1,12 +1,13 @@
+using DateBaseServices.DbModels;
 using NUnit.Framework;
 
 namespace TestProject1 {
     using DateBaseServices;
-    using DateBaseServices.Models;
     using SecurityService.Service;
 
-    public class Tests {
-        private string token = SecurityService.GenerateToken(2);
+    public class Tests
+    {
+        private string token = SecurityService.GenerateToken(1);
 
         private DataContext _db;
         [SetUp] public void Setup()
@@ -20,8 +21,8 @@ namespace TestProject1 {
         {
             _db.Users.AddOrUpdate(new User
             {
-                Login = "2",
-                Password = "2"
+                Login = "1",
+                Password = "1   "
             });
         }
 
@@ -47,40 +48,40 @@ namespace TestProject1 {
 
         #region Categories
 
-        [Test] 
+        [Test]
         public void CreateCategoty()
         {
             _db.Categories.CreateCategory(new Category
             {
-                Title = "4th category"
+                Title = "Second category"
             }, 1, token);
         }
-        
-        [Test] 
+
+        [Test]
         public void GetCategoty()
         {
             var cat = _db.Categories.GetCategoryById(1, 1, token);
         }
-        
-        [Test] 
+
+        [Test]
         public void UpdateCategoty()
         {
             _db.Categories.UpdateCategory(new Category
             {
-                CategoryId = 1,
-                Title = "thirth cat",
-                IsDeleted = true
+                CategoryId = 2,
+                Title = "Second cat",
+                IsDeleted = false
             }, 1, token);
         }
 
-        [Test] 
+        [Test]
         public void AddUserInCategory()
         {
             _db.Categories.AddUserInCategory(2,4,1, token);
 
         }
-        
-        [Test] 
+
+        [Test]
         public void RemoveUserFromCategory()
         {
             _db.Categories.RemoveUserFromCategory(1,2,1, token);
@@ -90,9 +91,34 @@ namespace TestProject1 {
         [Test] public void GetAllCatByUserIdTest()
         {
             var categories = _db.Categories.GetCategoriesByUserId(1, token);
-            
+
         }
 
+
+        #endregion
+
+        #region Notes
+
+        [Test]
+        public void AddNote()
+        {
+            _db.Notes.AddNote(
+                new Note
+                {
+                    Title = "First note",
+                    Body = "Body for first note",
+                    Header = "Header for first note"
+                },
+                1,
+                1,
+                token);
+        }
+
+        [Test]
+        public void GetNotes()
+        {
+            var notes = _db.Notes.GetNotesByCatIdForUserByUserId(1, 1, token);
+        }
 
         #endregion
 

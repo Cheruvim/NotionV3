@@ -1,8 +1,8 @@
-﻿namespace DateBaseServices.Models.TableConfigs 
-{
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+namespace DateBaseServices.DbModels.TableConfigs 
+{
     public class CategoryHistoryConfig : IEntityTypeConfiguration<CategoryHistory>
     {
         public void Configure(EntityTypeBuilder<CategoryHistory> builder)
